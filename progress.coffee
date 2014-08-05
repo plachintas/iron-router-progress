@@ -42,7 +42,7 @@ class IronRouterProgress
 			clearTimeout @delay
 			@percent = 0
 			@isDone  = false
-			
+
 			@currentOptions.reset.call @
 		@
 
@@ -111,6 +111,7 @@ IronRouterProgress.configure
 	tick    : true
 	enabled : true
 	delay   : false
+	pauseOnLoading: true
 
 	# Callbacks
 	# Resets the transition
@@ -144,10 +145,11 @@ Router.onBeforeAction (pause) ->
 		IronRouterProgress.done()
 	else
 		IronRouterProgress.progress()
-		if _.isFunction pause
-			pause()
-		else
-			@stop()
+		if IronRouterProgress.currentOptions.pauseOnLoading
+			if _.isFunction pause
+				pause()
+			else
+				@stop()
 	@
 
 Router.onAfterAction ->
